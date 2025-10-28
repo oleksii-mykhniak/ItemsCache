@@ -15,14 +15,16 @@
     <Company>ItemsCache</Company>
     <Product>ItemsCache</Product>
     <Description>A high-performance, flexible caching library for ASP.NET Core applications that provides automatic data loading, background refresh, and retry logic with SOLID principles.</Description>
-    <PackageProjectUrl>https://github.com/yourusername/items-cache</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/yourusername/items-cache</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/oleksii-mykhniak/ItemsCache</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/oleksii-mykhniak/ItemsCache</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>cache;caching;aspnetcore;performance;background;refresh;retry;polly</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageIcon>icon.jpeg</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -37,6 +39,11 @@
 
   <ItemGroup>
     <Folder Include="Extensions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\icon.jpeg" Pack="true" PackagePath="\" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>

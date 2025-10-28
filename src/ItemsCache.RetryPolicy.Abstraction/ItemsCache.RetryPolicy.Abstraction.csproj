@@ -7,6 +7,29 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <WarningsNotAsErrors />
+    
+    <!-- NuGet Package Configuration -->
+    <PackageId>ItemsCache.RetryPolicy.Abstraction</PackageId>
+    <Version>$(ItemsCacheVersion)</Version>
+    <Authors>ItemsCache Contributors</Authors>
+    <Company>ItemsCache</Company>
+    <Product>ItemsCache.RetryPolicy.Abstraction</Product>
+    <Description>Abstractions for retry policy functionality in ItemsCache - provides interfaces for resilient cache operations.</Description>
+    <PackageProjectUrl>https://github.com/oleksii-mykhniak/ItemsCache</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/oleksii-mykhniak/ItemsCache</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>cache;caching;aspnetcore;retry;policy;abstraction;interfaces</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageIcon>icon.jpeg</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\icon.jpeg" Pack="true" PackagePath="\" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
 </Project>

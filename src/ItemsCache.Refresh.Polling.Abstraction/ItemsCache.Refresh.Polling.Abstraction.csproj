@@ -7,10 +7,33 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <WarningsNotAsErrors />
+    
+    <!-- NuGet Package Configuration -->
+    <PackageId>ItemsCache.Refresh.Polling.Abstraction</PackageId>
+    <Version>$(ItemsCacheVersion)</Version>
+    <Authors>ItemsCache Contributors</Authors>
+    <Company>ItemsCache</Company>
+    <Product>ItemsCache.Refresh.Polling.Abstraction</Product>
+    <Description>Abstractions for polling-based refresh functionality in ItemsCache - provides interfaces for periodic cache refresh operations.</Description>
+    <PackageProjectUrl>https://github.com/oleksii-mykhniak/ItemsCache</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/oleksii-mykhniak/ItemsCache</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>cache;caching;aspnetcore;refresh;polling;abstraction;interfaces</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageIcon>icon.jpeg</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ItemsCache.Refresh.Abstraction\ItemsCache.Refresh.Abstraction.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\icon.jpeg" Pack="true" PackagePath="\" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>

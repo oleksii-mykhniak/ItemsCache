@@ -7,7 +7,30 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <WarningsNotAsErrors />
+    
+    <!-- NuGet Package Configuration -->
+    <PackageId>ItemsCache.Core.Abstraction</PackageId>
+    <Version>$(ItemsCacheVersion)</Version>
+    <Authors>ItemsCache Contributors</Authors>
+    <Company>ItemsCache</Company>
+    <Product>ItemsCache.Core.Abstraction</Product>
+    <Description>Core abstractions and interfaces for ItemsCache - provides the fundamental contracts for caching implementations.</Description>
+    <PackageProjectUrl>https://github.com/oleksii-mykhniak/ItemsCache</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/oleksii-mykhniak/ItemsCache</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>cache;caching;aspnetcore;abstraction;interfaces</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageIcon>icon.jpeg</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\icon.jpeg" Pack="true" PackagePath="\" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
 </Project>
 

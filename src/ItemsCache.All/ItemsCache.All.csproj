@@ -15,14 +15,16 @@
         <Company>ItemsCache</Company>
         <Product>ItemsCache.All</Product>
         <Description>Complete ItemsCache package with all features - includes core caching, background refresh, polling, and retry policies. Perfect for getting started quickly.</Description>
-        <PackageProjectUrl>https://github.com/yourusername/items-cache</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/yourusername/items-cache</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/oleksii-mykhniak/ItemsCache</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/oleksii-mykhniak/ItemsCache</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageTags>cache;caching;aspnetcore;performance;background;refresh;retry;polly;polling;complete</PackageTags>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <PackageIcon>icon.jpeg</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
@@ -30,6 +32,11 @@
       <ProjectReference Include="..\ItemsCache.Refresh.Core\ItemsCache.Refresh.Core.csproj" />
       <ProjectReference Include="..\ItemsCache.Refresh.Polling\ItemsCache.Refresh.Polling.csproj" />
       <ProjectReference Include="..\ItemsCache.RetryPolicy.Polly\ItemsCache.RetryPolicy.Polly.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="..\..\icon.jpeg" Pack="true" PackagePath="\" />
+      <None Include="..\..\README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
 </Project>

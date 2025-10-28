@@ -1,0 +1,61 @@
+{
+  "$schema": "https://gitversion.net/schema.json",
+  "major-version-bump-message": "\\b(major|breaking|breaking change)\\b",
+  "minor-version-bump-message": "\\b(minor|feature|feat)\\b",
+  "patch-version-bump-message": "\\b(patch|fix|hotfix|bugfix)\\b",
+  "legacy-semver-padding": 4,
+  "build-metadata-padding": 4,
+  "commits-since-version-source-padding": 4,
+  "commit-message-incrementing": "Enabled",
+  "branches": {
+    "main": {
+      "regex": "^(main|master)$",
+      "mode": "ContinuousDeployment",
+      "tag": "",
+      "increment": "Patch",
+      "prevent-increment-of-merged-branch-version": true,
+      "track-merge-target": false,
+      "source-branches": ["develop", "release"]
+    },
+    "develop": {
+      "regex": "^develop$",
+      "mode": "ContinuousDeployment",
+      "tag": "alpha",
+      "increment": "Minor",
+      "prevent-increment-of-merged-branch-version": false,
+      "track-merge-target": true,
+      "source-branches": []
+    },
+    "release": {
+      "regex": "^releases?[/-]",
+      "mode": "ContinuousDeployment",
+      "tag": "beta",
+      "increment": "Patch",
+      "prevent-increment-of-merged-branch-version": false,
+      "track-merge-target": false,
+      "source-branches": ["develop", "main"]
+    },
+    "feature": {
+      "regex": "^features?[/-]",
+      "mode": "ContinuousDeployment",
+      "tag": "alpha",
+      "increment": "Minor",
+      "prevent-increment-of-merged-branch-version": false,
+      "track-merge-target": false,
+      "source-branches": ["develop", "main"]
+    },
+    "hotfix": {
+      "regex": "^hotfix(es)?[/-]",
+      "mode": "ContinuousDeployment",
+      "tag": "",
+      "increment": "Patch",
+      "prevent-increment-of-merged-branch-version": false,
+      "track-merge-target": false,
+      "source-branches": ["main"]
+    }
+  },
+  "ignore": {
+    "sha": []
+  },
+  "increment": "Patch"
+}
