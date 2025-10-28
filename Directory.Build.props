@@ -13,7 +13,7 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
     
     <!-- ItemsCache Package Versions -->
-    <ItemsCacheVersion>1.0.0</ItemsCacheVersion>
+    <ItemsCacheVersion Condition="'$(ItemsCacheVersion)' == ''">1.0.0</ItemsCacheVersion>
     
     <!-- Common package properties -->
     <Authors>ItemsCache Contributors</Authors>

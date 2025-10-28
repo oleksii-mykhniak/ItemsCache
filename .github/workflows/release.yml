@@ -86,12 +86,8 @@ jobs:
     - name: Run tests
       run: dotnet test --configuration Release --no-build --verbosity normal
     
-    - name: Update version in Directory.Build.props
-      run: |
-        sed -i "s/<ItemsCacheVersion>.*<\/ItemsCacheVersion>/<ItemsCacheVersion>${{ needs.determine-version.outputs.version }}<\/ItemsCacheVersion>/" Directory.Build.props
-    
-    - name: Rebuild with updated version
-      run: dotnet build --configuration Release --no-restore
+    - name: Build with version
+      run: dotnet build --configuration Release --no-restore -p:ItemsCacheVersion=${{ needs.determine-version.outputs.version }}
     
     - name: Pack packages
       run: dotnet pack --configuration Release --no-build --output ./packages
@@ -183,35 +179,23 @@ jobs:
         echo "EOF" >> $GITHUB_OUTPUT
     
     - name: Create Release
-      uses: actions/create-release@v1
+      run: |
+        gh release create "v${{ needs.determine-version.outputs.version }}" \
+          --title "Release v${{ needs.determine-version.outputs.version }}" \
+          --notes "## Changes
+        ${{ steps.changelog.outputs.changelog }}
+        
+        ## Packages
+        - ItemsCache.Core.Abstraction
+        - ItemsCache.Core
+        - ItemsCache.Refresh.Abstraction
+        - ItemsCache.Refresh.Core
+        - ItemsCache.Refresh.Polling.Abstraction
+        - ItemsCache.Refresh.Polling
+        - ItemsCache.RetryPolicy.Abstraction
+        - ItemsCache.RetryPolicy.Polly
+        - ItemsCache.All" \
+          ${{ needs.determine-version.outputs.is-prerelease == 'true' && '--prerelease' || '' }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: v${{ needs.determine-version.outputs.version }}
-        release_name: Release v${{ needs.determine-version.outputs.version }}
-        body: |
-          ## Changes
-          ${{ steps.changelog.outputs.changelog }}
-          
-          ## Packages
-          - ItemsCache.Core.Abstraction
-          - ItemsCache.Core
-          - ItemsCache.Refresh.Abstraction
-          - ItemsCache.Refresh.Core
-          - ItemsCache.Refresh.Polling.Abstraction
-          - ItemsCache.Refresh.Polling
-          - ItemsCache.RetryPolicy.Abstraction
-          - ItemsCache.RetryPolicy.Polly
-          - ItemsCache.All
-        draft: false
-        prerelease: ${{ needs.determine-version.outputs.is-prerelease == 'true' }}
     
-    - name: Upload Release Assets
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./packages
-        asset_name: packages
-        asset_content_type: application/zip
