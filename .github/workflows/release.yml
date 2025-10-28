@@ -92,13 +92,20 @@ jobs:
       run: dotnet test --configuration Release --no-build --verbosity normal
     
     - name: Build with version
-      run: dotnet build --configuration Release --no-restore -p:ItemsCacheVersion=${{ needs.determine-version.outputs.version }}
+      run: |
+        echo "Building with version: ${{ needs.determine-version.outputs.version }}"
+        dotnet build --configuration Release --no-restore -p:ItemsCacheVersion=${{ needs.determine-version.outputs.version }}
     
     - name: Pack packages
-      run: dotnet pack --configuration Release --no-build --output ./packages
+      run: |
+        echo "Packing with version: ${{ needs.determine-version.outputs.version }}"
+        dotnet pack --configuration Release --no-build --output ./packages -p:ItemsCacheVersion=${{ needs.determine-version.outputs.version }}
     
     - name: Validate packages
       run: |
+        echo "Generated packages:"
+        ls -la ./packages/
+        echo ""
         for package in ./packages/*.nupkg; do
           echo "Validating package: $package"
           # Basic validation - check if package exists and has correct structure
