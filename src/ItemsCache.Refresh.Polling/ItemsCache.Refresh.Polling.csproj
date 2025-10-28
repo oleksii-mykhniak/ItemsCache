@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <WarningsNotAsErrors />
+    
+    <!-- NuGet Package Configuration -->
+    <PackageId>ItemsCache.Refresh.Polling</PackageId>
+    <Version>$(ItemsCacheVersion)</Version>
+    <Authors>ItemsCache Contributors</Authors>
+    <Company>ItemsCache</Company>
+    <Product>ItemsCache.Refresh.Polling</Product>
+    <Description>Polling-based refresh implementation for ItemsCache - provides periodic cache refresh using background services.</Description>
+    <PackageProjectUrl>https://github.com/yourusername/items-cache</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/yourusername/items-cache</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>cache;caching;aspnetcore;background;refresh;polling;hosted-service</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ItemsCache.Core.Abstraction\ItemsCache.Core.Abstraction.csproj" />
+    <ProjectReference Include="..\ItemsCache.Refresh.Abstraction\ItemsCache.Refresh.Abstraction.csproj" />
+    <ProjectReference Include="..\ItemsCache.Refresh.Core\ItemsCache.Refresh.Core.csproj" />
+    <ProjectReference Include="..\ItemsCache.Refresh.Polling.Abstraction\ItemsCache.Refresh.Polling.Abstraction.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+
+</Project>

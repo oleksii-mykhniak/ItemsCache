@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <WarningsNotAsErrors />
+    
+    <!-- NuGet Package Configuration -->
+    <PackageId>ItemsCache</PackageId>
+    <Version>$(ItemsCacheVersion)</Version>
+    <Authors>ItemsCache Contributors</Authors>
+    <Company>ItemsCache</Company>
+    <Product>ItemsCache</Product>
+    <Description>A high-performance, flexible caching library for ASP.NET Core applications that provides automatic data loading, background refresh, and retry logic with SOLID principles.</Description>
+    <PackageProjectUrl>https://github.com/yourusername/items-cache</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/yourusername/items-cache</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>cache;caching;aspnetcore;performance;background;refresh;retry;polly</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ItemsCache.Core.Abstraction\ItemsCache.Core.Abstraction.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+
+</Project>

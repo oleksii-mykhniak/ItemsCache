@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <WarningsAsErrors />
+        <WarningsNotAsErrors />
+        
+        <!-- NuGet Package Configuration -->
+        <PackageId>ItemsCache.All</PackageId>
+        <Version>$(ItemsCacheVersion)</Version>
+        <Authors>ItemsCache Contributors</Authors>
+        <Company>ItemsCache</Company>
+        <Product>ItemsCache.All</Product>
+        <Description>Complete ItemsCache package with all features - includes core caching, background refresh, polling, and retry policies. Perfect for getting started quickly.</Description>
+        <PackageProjectUrl>https://github.com/yourusername/items-cache</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/yourusername/items-cache</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageTags>cache;caching;aspnetcore;performance;background;refresh;retry;polly;polling;complete</PackageTags>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ItemsCache.Core\ItemsCache.Core.csproj" />
+      <ProjectReference Include="..\ItemsCache.Refresh.Core\ItemsCache.Refresh.Core.csproj" />
+      <ProjectReference Include="..\ItemsCache.Refresh.Polling\ItemsCache.Refresh.Polling.csproj" />
+      <ProjectReference Include="..\ItemsCache.RetryPolicy.Polly\ItemsCache.RetryPolicy.Polly.csproj" />
+    </ItemGroup>
+
+</Project>
