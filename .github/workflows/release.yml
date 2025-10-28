@@ -42,14 +42,15 @@ jobs:
         echo "version=$VERSION" >> $GITHUB_OUTPUT
         
         # Check if it's a prerelease
-        if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-.*)?$ ]]; then
-          if [[ "$VERSION" =~ - ]]; then
-            echo "is-prerelease=true" >> $GITHUB_OUTPUT
-          else
-            echo "is-prerelease=false" >> $GITHUB_OUTPUT
-          fi
-        else
+        if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          # Stable release (e.g., 1.0.0, 2.1.3)
+          echo "is-prerelease=false" >> $GITHUB_OUTPUT
+        elif [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-.*)$ ]]; then
+          # Pre-release (e.g., 1.0.0-beta.1, 1.0.0-preview.1)
           echo "is-prerelease=true" >> $GITHUB_OUTPUT
+        else
+          # Default to stable for other formats
+          echo "is-prerelease=false" >> $GITHUB_OUTPUT
         fi
 
   build-and-pack:
@@ -122,7 +123,6 @@ jobs:
     name: Publish to NuGet
     runs-on: ubuntu-latest
     needs: [determine-version, build-and-pack]
-    if: needs.determine-version.outputs.is-prerelease == 'false'
     
     steps:
     - name: Download packages
@@ -146,39 +146,11 @@ jobs:
             --skip-duplicate
         done
 
-  publish-github-packages:
-    name: Publish to GitHub Packages
-    runs-on: ubuntu-latest
-    needs: [determine-version, build-and-pack]
-    if: needs.determine-version.outputs.is-prerelease == 'true'
-    
-    steps:
-    - name: Download packages
-      uses: actions/download-artifact@v4
-      with:
-        name: packages
-        path: ./packages
-    
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
-    
-    - name: Publish to GitHub Packages
-      run: |
-        for package in ./packages/*.nupkg; do
-          echo "Publishing package: $package"
-            dotnet nuget push "$package" \
-              --api-key "${{ secrets.GITHUB_TOKEN }}" \
-              --source "https://nuget.pkg.github.com/oleksii-mykhniak/index.json" \
-              --skip-duplicate
-        done
-
   create-release:
     name: Create Release
     runs-on: ubuntu-latest
-    needs: [determine-version, build-and-pack, publish-nuget, publish-github-packages]
-    if: always() && (needs.publish-nuget.result == 'success' || needs.publish-github-packages.result == 'success')
+    needs: [determine-version, build-and-pack, publish-nuget]
+    if: always() && needs.publish-nuget.result == 'success'
     
     steps:
     - name: Checkout code
