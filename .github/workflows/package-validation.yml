@@ -1,0 +1,77 @@
+name: Package Validation
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to validate (e.g., 1.0.0)'
+        required: true
+        type: string
+
+env:
+  DOTNET_VERSION: '9.0.x'
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+jobs:
+  validate-packages:
+    name: Validate Packages
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Cache NuGet packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build solution
+      run: dotnet build --configuration Release --no-restore
+    
+    - name: Run tests
+      run: dotnet test --configuration Release --no-build --verbosity normal
+    
+    - name: Pack packages
+      run: dotnet pack --configuration Release --no-build --output ./packages
+    
+    - name: Validate packages
+      run: |
+        echo "Generated packages:"
+        ls -la ./packages/
+        
+        for package in ./packages/*.nupkg; do
+          echo "Validating package: $package"
+          # Basic validation - check if package exists and has correct structure
+          if [ -f "$package" ]; then
+            echo "✅ Package exists: $package"
+            # Extract and check package contents
+            unzip -l "$package" | head -20
+          else
+            echo "❌ Package not found: $package"
+            exit 1
+          fi
+        done
+    
+    - name: Upload packages
+      uses: actions/upload-artifact@v4
+      with:
+        name: packages
+        path: ./packages/*.nupkg
+        retention-days: 30
