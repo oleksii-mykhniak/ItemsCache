@@ -30,7 +30,7 @@ internal sealed class ItemsCacheLoader<TCacheItem, TKey> : IItemsCacheLoader
             _logger.LogInformation("ItemsCache {CacheItemType} Loading initial cache", typeof(TCacheItem).Name);
 
             var allItems = await _dataSource.LoadAllAsync(cancellationToken);
-            var allItemsDictionary = allItems.ToDictionary();
+            var allItemsDictionary = allItems.ToDictionary(item => item.Key, item => item.Value);
             _itemsCacheService.TryRefresh(allItemsDictionary);
 
             _logger.LogInformation("ItemsCache {CacheItemType} Successfully loaded {ItemCount} items into cache", typeof(TCacheItem).Name, allItemsDictionary.Count);
