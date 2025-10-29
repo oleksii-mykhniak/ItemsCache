@@ -9,17 +9,17 @@
 
 <!--    for libraries shared across multiple projects-->
     <ItemGroup>
-        <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.10"/>
-        <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.10"/>
-        <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.10"/>
+        <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0"/>
+        <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0"/>
+        <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0"/>
 
         <PackageVersion Include="Polly" Version="8.6.4"/>
     </ItemGroup>
 
 <!--    for sample applications-->
     <ItemGroup>
-        <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.10"/>
-        <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.10"/>
-        <PackageVersion Include="Swashbuckle.AspNetCore" Version="9.0.6"/>
+        <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0"/>
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0"/>
+        <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.8.0"/>
     </ItemGroup>
 </Project>

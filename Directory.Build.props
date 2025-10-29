@@ -1,7 +1,10 @@
 <Project>
   <PropertyGroup>
-    <!-- Common build properties -->
-    <TargetFramework>net9.0</TargetFramework>
+    <!-- Target multiple .NET versions for maximum compatibility -->
+    <TargetFrameworks Condition="'$(IsSampleProject)' != 'true'">net6.0;net7.0;net8.0;net9.0</TargetFrameworks>
+    
+    <!-- Sample projects should only target the latest version -->
+    <TargetFramework Condition="'$(IsSampleProject)' == 'true'">net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

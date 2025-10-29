@@ -14,7 +14,7 @@ permissions:
   pull-requests: write
 
 env:
-  DOTNET_VERSION: '9.0.x'
+  DOTNET_VERSIONS: '["6.0.x", "7.0.x", "8.0.x", "9.0.x"]'
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
 
 jobs:
@@ -25,6 +25,7 @@ jobs:
     strategy:
       matrix:
         configuration: [Debug, Release]
+        dotnet-version: [6.0.x, 7.0.x, 8.0.x, 9.0.x]
     
     steps:
     - name: Checkout code
@@ -35,7 +36,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
+        dotnet-version: ${{ matrix.dotnet-version }}
     
     - name: Cache NuGet packages
       uses: actions/cache@v4
@@ -73,7 +74,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
+        dotnet-version: ${{ matrix.dotnet-version }}
     
     - name: Run security scan
       run: |
