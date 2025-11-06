@@ -50,7 +50,7 @@ jobs:
         run: dotnet restore ItemsCache.sln
 
       - name: Build solution
-        run: dotnet build ItemsCache.sln --no-restore --configuration ${{ matrix.configuration }}  -p:GeneratePackageOnBuild=false
+        run: dotnet build ItemsCache.sln --no-restore --configuration ${{ matrix.configuration }}
 
       - name: Run tests
         run: dotnet test ItemsCache.sln --no-build --configuration ${{ matrix.configuration }} --verbosity normal --collect:"XPlat Code Coverage"
