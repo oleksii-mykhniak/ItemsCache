@@ -1,44 +1,42 @@
 <Project>
-  <PropertyGroup>
-    <!-- Target multiple .NET versions for maximum compatibility -->
-    <TargetFrameworks Condition="'$(IsSampleProject)' != 'true' AND '$(TargetFramework)' == ''">net6.0;net7.0;net8.0;net9.0</TargetFrameworks>
-    
-    <!-- Sample projects should only target the latest version -->
-    <TargetFramework Condition="'$(IsSampleProject)' == 'true' AND '$(TargetFramework)' == ''">net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsAsErrors />
-    <WarningsNotAsErrors />
-    
-    <!-- Version and package management -->
-    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
-    
-    <!-- ItemsCache Package Versions -->
-    <ItemsCacheVersion Condition="'$(ItemsCacheVersion)' == ''">1.0.0</ItemsCacheVersion>
-    
-    <!-- Common package properties -->
-    <Authors>ItemsCache Contributors</Authors>
-    <Company>ItemsCache</Company>
-    <PackageProjectUrl>https://github.com/oleksii-mykhniak/ItemsCache</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/oleksii-mykhniak/ItemsCache</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageIcon>icon.jpeg</PackageIcon>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    
-    <!-- Build configuration -->
-    <LangVersion>latest</LangVersion>
-    <Deterministic>true</Deterministic>
-    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
-    
-    <!-- Documentation -->
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);1591</NoWarn>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFrameworks Condition="'$(CI)' == 'true' AND '$(TargetFramework)' == ''">netstandard2.0;net472;net462;net6.0;net7.0;net8.0;net9.0</TargetFrameworks>
+
+        <TargetFramework Condition="'$(CI)' != 'true' AND '$(TargetFramework)' == ''">net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <WarningsAsErrors/>
+        <WarningsNotAsErrors/>
+
+        <!-- Version and package management -->
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+        <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+
+        <!-- ItemsCache Package Versions -->
+        <ItemsCacheVersion Condition="'$(ItemsCacheVersion)' == ''">1.0.0</ItemsCacheVersion>
+
+        <!-- Common package properties -->
+        <Authors>ItemsCache Contributors</Authors>
+        <Company>ItemsCache</Company>
+        <PackageProjectUrl>https://github.com/oleksii-mykhniak/ItemsCache</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/oleksii-mykhniak/ItemsCache</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageIcon>icon.jpeg</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+        <!-- Build configuration -->
+        <LangVersion>latest</LangVersion>
+        <Deterministic>true</Deterministic>
+        <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+
+        <!-- Documentation -->
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+    </PropertyGroup>
 
 </Project>
