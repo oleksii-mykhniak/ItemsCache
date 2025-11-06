@@ -1,6 +1,6 @@
 namespace ItemsCache.Core.Abstraction.Interfaces
 {
-    public interface IItemsCacheService<TCacheItem, TKey> where TKey : notnull
+    public interface IItemsCacheService<TKey, TCacheItem> where TKey : notnull
     {
         int Count { get; }
 

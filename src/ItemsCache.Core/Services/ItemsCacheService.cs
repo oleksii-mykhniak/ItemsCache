@@ -4,9 +4,9 @@ using ItemsCache.Core.Abstraction.Interfaces;
 
 namespace ItemsCache.Core.Services
 {
-    internal sealed class ItemsCacheService<TCacheItem, TKey> : IItemsCacheServiceWithModifications<TCacheItem, TKey>
-        where TCacheItem : class
+    internal sealed class ItemsCacheService<TKey, TCacheItem> : IItemsCacheServiceWithModifications<TKey, TCacheItem>
         where TKey : notnull
+        where TCacheItem : class
     {
         private volatile bool _isInitialized;
         private ConcurrentDictionary<TKey, TCacheItem> _cache = new();

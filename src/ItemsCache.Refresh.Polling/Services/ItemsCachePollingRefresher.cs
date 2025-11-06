@@ -5,21 +5,21 @@ using Microsoft.Extensions.Logging;
 
 namespace ItemsCache.Refresh.Polling.Services
 {
-    internal sealed class ItemsCachePollingRefresher<TCacheItem, TKey, TRefreshContext> : IItemsCachePollingRefresher
-        where TCacheItem : class
+    internal sealed class ItemsCachePollingRefresher<TKey, TCacheItem, TRefreshContext> : IItemsCachePollingRefresher
         where TKey : notnull
+        where TCacheItem : class
     {
-        private readonly IDataSourceWithRefresh<TCacheItem, TKey, TRefreshContext> _dataSource;
-        private readonly IRefreshItemCacheHandlerFactory<TCacheItem, TKey> _refreshItemCacheHandlerFactory;
-        private readonly ILogger<ItemsCachePollingRefresher<TCacheItem, TKey, TRefreshContext>> _logger;
+        private readonly IDataSourceWithRefresh<TKey, TCacheItem, TRefreshContext> _dataSource;
+        private readonly IRefreshItemCacheHandlerFactory<TKey, TCacheItem> _refreshItemCacheHandlerFactory;
+        private readonly ILogger<ItemsCachePollingRefresher<TKey, TCacheItem, TRefreshContext>> _logger;
 
         private TRefreshContext? _lastRefreshContext;
 
         private readonly SemaphoreSlim _semaphoreSlim = new(1, 1);
 
-        public ItemsCachePollingRefresher(IDataSourceWithRefresh<TCacheItem, TKey, TRefreshContext> dataSource,
-            IRefreshItemCacheHandlerFactory<TCacheItem, TKey> refreshItemCacheHandlerFactory,
-            ILogger<ItemsCachePollingRefresher<TCacheItem, TKey, TRefreshContext>> logger)
+        public ItemsCachePollingRefresher(IDataSourceWithRefresh<TKey, TCacheItem, TRefreshContext> dataSource,
+            IRefreshItemCacheHandlerFactory<TKey, TCacheItem> refreshItemCacheHandlerFactory,
+            ILogger<ItemsCachePollingRefresher<TKey, TCacheItem, TRefreshContext>> logger)
         {
             _dataSource = dataSource;
             _refreshItemCacheHandlerFactory = refreshItemCacheHandlerFactory;

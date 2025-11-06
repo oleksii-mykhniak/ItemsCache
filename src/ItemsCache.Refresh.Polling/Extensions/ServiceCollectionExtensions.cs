@@ -9,16 +9,16 @@ namespace ItemsCache.Refresh.Polling.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddPollingRefreshItemCacheHandler<TCacheItem, TKey, TRefreshContext>(this IServiceCollection serviceCollection, IConfiguration configuration)
-            where TRefreshContext : class
-            where TCacheItem : class
+        public static IServiceCollection AddPollingRefreshItemCacheHandler<TKey, TCacheItem, TRefreshContext>(this IServiceCollection serviceCollection, IConfiguration configuration)
             where TKey : notnull
+            where TCacheItem : class
+            where TRefreshContext : class
         {
             // Register refresh handlers
-            serviceCollection.AddRefreshItemCacheHandlers<TCacheItem, TKey>();
+            serviceCollection.AddRefreshItemCacheHandlers<TKey, TCacheItem>();
             
             // Register polling-specific services
-            serviceCollection.AddTransient<IItemsCachePollingRefresher, ItemsCachePollingRefresher<TCacheItem, TKey, TRefreshContext>>();
+            serviceCollection.AddTransient<IItemsCachePollingRefresher, ItemsCachePollingRefresher<TKey, TCacheItem, TRefreshContext>>();
             serviceCollection.AddHostedService<ItemsCachePollingRefreshBackgroundService>();
             
             serviceCollection.Configure<ItemsCacheOptions>(configuration.GetSection("CacheOptions"));

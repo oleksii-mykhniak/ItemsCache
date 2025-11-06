@@ -4,17 +4,17 @@ using Microsoft.Extensions.Logging;
 
 namespace ItemsCache.Core.Services;
 
-internal sealed class ItemsCacheLoader<TCacheItem, TKey> : IItemsCacheLoader
-    where TCacheItem : class
+internal sealed class ItemsCacheLoader<TKey, TCacheItem> : IItemsCacheLoader
     where TKey : notnull
+    where TCacheItem : class
 {
-    private readonly IDataSource<TCacheItem, TKey> _dataSource;
-    private readonly IItemsCacheServiceWithModifications<TCacheItem, TKey> _itemsCacheService;
-    private readonly ILogger<ItemsCacheLoader<TCacheItem, TKey>> _logger;
+    private readonly IDataSource<TKey, TCacheItem> _dataSource;
+    private readonly IItemsCacheServiceWithModifications<TKey, TCacheItem> _itemsCacheService;
+    private readonly ILogger<ItemsCacheLoader<TKey, TCacheItem>> _logger;
 
     private readonly SemaphoreSlim _semaphoreSlim = new(1, 1);
     
-    public ItemsCacheLoader(IDataSource<TCacheItem, TKey> dataSource, IItemsCacheServiceWithModifications<TCacheItem, TKey> itemsCacheService, ILogger<ItemsCacheLoader<TCacheItem, TKey>> logger)
+    public ItemsCacheLoader(IDataSource<TKey, TCacheItem> dataSource, IItemsCacheServiceWithModifications<TKey, TCacheItem> itemsCacheService, ILogger<ItemsCacheLoader<TKey, TCacheItem>> logger)
     {
         _dataSource = dataSource;
         _itemsCacheService = itemsCacheService;

@@ -1,8 +1,8 @@
 namespace ItemsCache.Refresh.Abstraction.Models;
 
-public class RefreshCacheItem<TCacheItem, TKey>
-    where TCacheItem : class
+public class RefreshCacheItem<TKey, TCacheItem>
     where TKey : notnull
+    where TCacheItem : class
 {
     public TKey Key { get; }
 

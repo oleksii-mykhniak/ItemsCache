@@ -5,13 +5,13 @@ using Microsoft.Extensions.Logging;
 
 namespace ItemsCache.Refresh.Core.Handlers
 {
-    internal sealed class UpdatedRefreshItemCacheHandler<TCacheItem, TKey> : IRefreshItemCacheHandler<TCacheItem, TKey>
+    internal sealed class UpdatedRefreshItemCacheHandler<TKey, TCacheItem> : IRefreshItemCacheHandler<TKey, TCacheItem>
         where TKey : notnull
     {
-        private readonly IItemsCacheServiceWithModifications<TCacheItem, TKey> _itemsCacheService;
-        private readonly ILogger<UpdatedRefreshItemCacheHandler<TCacheItem, TKey>> _logger;
+        private readonly IItemsCacheServiceWithModifications<TKey, TCacheItem> _itemsCacheService;
+        private readonly ILogger<UpdatedRefreshItemCacheHandler<TKey, TCacheItem>> _logger;
 
-        public UpdatedRefreshItemCacheHandler(IItemsCacheServiceWithModifications<TCacheItem, TKey> itemsCacheService, ILogger<UpdatedRefreshItemCacheHandler<TCacheItem, TKey>> logger)
+        public UpdatedRefreshItemCacheHandler(IItemsCacheServiceWithModifications<TKey, TCacheItem> itemsCacheService, ILogger<UpdatedRefreshItemCacheHandler<TKey, TCacheItem>> logger)
         {
             _itemsCacheService = itemsCacheService;
             _logger = logger;

@@ -6,13 +6,13 @@ namespace ItemsCache.Refresh.Core.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddRefreshItemCacheHandlers<TCacheItem, TKey>(this IServiceCollection serviceCollection)
-            where TCacheItem : class
+        public static IServiceCollection AddRefreshItemCacheHandlers<TKey, TCacheItem>(this IServiceCollection serviceCollection)
             where TKey : notnull
+            where TCacheItem : class
         {
-            serviceCollection.AddTransient<IRefreshItemCacheHandler<TCacheItem, TKey>, UpdatedRefreshItemCacheHandler<TCacheItem, TKey>>();
-            serviceCollection.AddTransient<IRefreshItemCacheHandler<TCacheItem, TKey>, DeletedRefreshItemCacheHandler<TCacheItem, TKey>>();
-            serviceCollection.AddTransient<IRefreshItemCacheHandlerFactory<TCacheItem, TKey>, RefreshItemCacheHandlerFactory<TCacheItem, TKey>>();
+            serviceCollection.AddTransient<IRefreshItemCacheHandler<TKey, TCacheItem>, UpdatedRefreshItemCacheHandler<TKey, TCacheItem>>();
+            serviceCollection.AddTransient<IRefreshItemCacheHandler<TKey, TCacheItem>, DeletedRefreshItemCacheHandler<TKey, TCacheItem>>();
+            serviceCollection.AddTransient<IRefreshItemCacheHandlerFactory<TKey, TCacheItem>, RefreshItemCacheHandlerFactory<TKey, TCacheItem>>();
             
             return serviceCollection;
         }

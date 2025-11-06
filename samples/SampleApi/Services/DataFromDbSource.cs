@@ -5,7 +5,7 @@ using SampleApi.Models;
 
 namespace SampleApi.Services;
 
-public class DataFromDbSource : IDataSource<Product, int>
+public class DataFromDbSource : IDataSource<int, Product>
 {
     private readonly AppDbContext _dbContext;
 

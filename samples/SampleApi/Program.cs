@@ -16,27 +16,27 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseInMemoryDatabase("InMemoryDb"));
 
-builder.Services.AddItemsCache<Product, int>();
+builder.Services.AddItemsCache<int, Product>();
 
 // without retry policy
-builder.Services.AddScoped<IDataSource<Product, int>, DataFromDbSource>();
+builder.Services.AddScoped<IDataSource<int, Product>, DataFromDbSource>();
 
 // with retry policy
-// builder.Services.AddScoped<IDataSource<Product, int>>(sp =>
+// builder.Services.AddScoped<IDataSource<int, Product>>(sp =>
 // {
-//     var logger = sp.GetRequiredService<ILogger<RetryDataSourceDecorator<Product, int>>>();
+//     var logger = sp.GetRequiredService<ILogger<RetryDataSourceDecorator<int, Product>>>();
 //
-//     return new RetryDataSourceDecorator<Product, int>(
+//     return new RetryDataSourceDecorator<int, Product>(
 //         new DataFromDbSource(sp.GetRequiredService<AppDbContext>()),
 //         new RetryPolicyWithPolly(new RetryOptions { }, logger, "DataFromDbSource"),
 //         logger);
 // });
 
 //with polling refresh
-builder.Services.AddPollingRefreshItemCacheHandler<Product, int, RefreshContext>(builder.Configuration);
+builder.Services.AddPollingRefreshItemCacheHandler<int, Product, RefreshContext>(builder.Configuration);
 
 // Data source without retry policy
-builder.Services.AddScoped<IDataSourceWithRefresh<Product, int, RefreshContext>, DataFromDbSourceWithRefresh>();
+builder.Services.AddScoped<IDataSourceWithRefresh<int, Product, RefreshContext>, DataFromDbSourceWithRefresh>();
 
 var app = builder.Build();
 

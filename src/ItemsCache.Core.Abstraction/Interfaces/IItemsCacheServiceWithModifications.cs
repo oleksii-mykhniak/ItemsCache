@@ -1,6 +1,6 @@
 namespace ItemsCache.Core.Abstraction.Interfaces;
 
-public interface IItemsCacheServiceWithModifications<TCacheItem, TKey> : IItemsCacheService<TCacheItem, TKey>
+public interface IItemsCacheServiceWithModifications<TKey, TCacheItem> : IItemsCacheService<TKey, TCacheItem>
     where TKey : notnull
 {
     bool TryRefresh(IEnumerable<KeyValuePair<TKey, TCacheItem>> items);

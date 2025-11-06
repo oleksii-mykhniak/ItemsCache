@@ -7,7 +7,7 @@ using SampleApi.Models;
 
 namespace SampleApi.Services;
 
-public class DataFromDbSourceWithRefresh : IDataSourceWithRefresh<Product, int, RefreshContext>
+public class DataFromDbSourceWithRefresh : IDataSourceWithRefresh<int, Product, RefreshContext>
 {
     private readonly AppDbContext _dbContext;
 
@@ -16,7 +16,7 @@ public class DataFromDbSourceWithRefresh : IDataSourceWithRefresh<Product, int, 
         _dbContext = dbContext;
     }
 
-    public async Task<CacheItemRefreshResult<Product, int, RefreshContext>> GetUpdatedItemsAsync(RefreshContext? lastRefreshContext, CancellationToken cancellationToken = default)
+    public async Task<CacheItemRefreshResult<int, Product, RefreshContext>> GetUpdatedItemsAsync(RefreshContext? lastRefreshContext, CancellationToken cancellationToken = default)
     {
         var lastRefreshTime = lastRefreshContext?.LastRefresh ?? DateTime.MinValue;
 
@@ -33,9 +33,9 @@ public class DataFromDbSourceWithRefresh : IDataSourceWithRefresh<Product, int, 
         };
 
         var cacheItems = updatedItems
-            .Select(item => new RefreshCacheItem<Product, int>(item.Id, item, item.DeletedAt != null ? RefreshCacheItemStatus.Deleted : RefreshCacheItemStatus.Updated))
+            .Select(item => new RefreshCacheItem<int, Product>(item.Id, item, item.DeletedAt != null ? RefreshCacheItemStatus.Deleted : RefreshCacheItemStatus.Updated))
             .ToList();
 
-        return new CacheItemRefreshResult<Product, int, RefreshContext>(cacheItems, newRefreshContext);
+        return new CacheItemRefreshResult<int, Product, RefreshContext>(cacheItems, newRefreshContext);
     }
 }

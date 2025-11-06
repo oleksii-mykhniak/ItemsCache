@@ -11,11 +11,11 @@ namespace SampleApi.Controllers
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
-        private readonly IItemsCacheService<Product, int> _productItemsCache;
+        private readonly IItemsCacheService<int, Product> _productItemsCache;
         private readonly ILogger<ProductsController> _logger;
 
         public ProductsController(
-            IItemsCacheService<Product, int> productItemsCache,
+            IItemsCacheService<int, Product> productItemsCache,
             ILogger<ProductsController> logger)
         {
             _productItemsCache = productItemsCache ?? throw new ArgumentNullException(nameof(productItemsCache));

@@ -8,16 +8,16 @@ namespace ItemsCache.Core.Extensions;
 
 public static class ServiceProviderExtensions
 {
-    public static IServiceCollection AddItemsCache<TCacheItem, TKey>(this IServiceCollection serviceCollection)
-        where TCacheItem : class
+    public static IServiceCollection AddItemsCache<TKey, TCacheItem>(this IServiceCollection serviceCollection)
         where TKey : notnull
+        where TCacheItem : class
     {
-        var cache = new ItemsCacheService<TCacheItem, TKey>();
+        var cache = new ItemsCacheService<TKey, TCacheItem>();
         
-        serviceCollection.AddSingleton<IItemsCacheService<TCacheItem, TKey>>(cache);
-        serviceCollection.AddSingleton<IItemsCacheServiceWithModifications<TCacheItem, TKey>>(cache);
+        serviceCollection.AddSingleton<IItemsCacheService<TKey, TCacheItem>>(cache);
+        serviceCollection.AddSingleton<IItemsCacheServiceWithModifications<TKey, TCacheItem>>(cache);
         
-        serviceCollection.AddTransient<IItemsCacheLoader, ItemsCacheLoader<TCacheItem, TKey>>();
+        serviceCollection.AddTransient<IItemsCacheLoader, ItemsCacheLoader<TKey, TCacheItem>>();
         
         serviceCollection.TryAddScoped<IItemsCacheInitService, ItemsCacheInitService>();
         serviceCollection.AddHostedService<CacheInitHostedService>();
