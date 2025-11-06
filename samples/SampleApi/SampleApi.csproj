@@ -18,10 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\ItemsCache.All\ItemsCache.All.csproj" />
-    <ProjectReference Include="..\..\src\ItemsCache.Core\ItemsCache.Core.csproj" />
-    <ProjectReference Include="..\..\src\ItemsCache.Refresh.Core\ItemsCache.Refresh.Core.csproj" />
-    <ProjectReference Include="..\..\src\ItemsCache.Refresh.Polling\ItemsCache.Refresh.Polling.csproj" />
-    <ProjectReference Include="..\..\src\ItemsCache.RetryPolicy.Polly\ItemsCache.RetryPolicy.Polly.csproj" />
   </ItemGroup>
 
 </Project>

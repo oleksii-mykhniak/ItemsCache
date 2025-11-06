@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <!-- Override multi-targeting for sample projects -->
+    <TargetFrameworks></TargetFrameworks>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+</Project>
