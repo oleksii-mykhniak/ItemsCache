@@ -11,7 +11,7 @@ internal sealed class ItemsCacheGroupedService<TKey, TCacheItem, TGroupKey>
 {
     private readonly Func<TCacheItem, TGroupKey> _keySelector;
     private readonly ILogger<ItemsCacheGroupedService<TKey, TCacheItem, TGroupKey>> _logger;
-    private readonly Lock _lockObject = new();
+    private readonly object _lockObject = new();
     
     //TODO: use concurrent collections and lock only for atomic writes
     
