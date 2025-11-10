@@ -10,8 +10,23 @@ namespace ItemsCache.Core.Services
     {
         private volatile bool _isInitialized;
         private ConcurrentDictionary<TKey, TCacheItem> _cache = new();
+        private readonly List<ICacheUpdateObserver<TKey, TCacheItem>> _observers = new();
 
         public int Count => _cache.Count;
+
+        public void RegisterObserver(ICacheUpdateObserver<TKey, TCacheItem> observer)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+
+            lock (_observers)
+            {
+                if (!_observers.Contains(observer))
+                {
+                    _observers.Add(observer);
+                }
+            }
+        }
 
         public bool TryGetByKey(TKey key, out TCacheItem? item)
         {
@@ -33,18 +48,105 @@ namespace ItemsCache.Core.Services
         {
             _cache = new ConcurrentDictionary<TKey, TCacheItem>(items);
             _isInitialized = true;
+            
+            // Notify observers
+            NotifyObserversRefreshed(items);
+            
             return true;
         }
 
         public bool TrySet(TKey key, TCacheItem item)
         {
             var itemFromCache = _cache.AddOrUpdate(key, item, (_, _) => item);
-            return itemFromCache.Equals(item);
+            var result = itemFromCache.Equals(item);
+            
+            // Notify observers
+            if (result)
+            {
+                NotifyObserversItemUpdated(key, item);
+            }
+            
+            return result;
         }
 
         public bool TryDelete(TKey key)
         {
-            return _cache.TryRemove(key, out _);
+            var result = _cache.TryRemove(key, out _);
+            
+            // Notify observers
+            if (result)
+            {
+                NotifyObserversItemDeleted(key);
+            }
+            
+            return result;
+        }
+
+        private void NotifyObserversRefreshed(IEnumerable<KeyValuePair<TKey, TCacheItem>> items)
+        {
+            List<ICacheUpdateObserver<TKey, TCacheItem>> observersCopy;
+            lock (_observers)
+            {
+                observersCopy = new List<ICacheUpdateObserver<TKey, TCacheItem>>(_observers);
+            }
+
+            foreach (var observer in observersCopy)
+            {
+                try
+                {
+                    observer.OnCacheRefreshed(items);
+                }
+                catch (Exception ex)
+                {
+                    // Log error but don't fail the operation
+                    // In production, you might want to use ILogger here
+                    System.Diagnostics.Debug.WriteLine($"Error notifying observer: {ex.Message}");
+                }
+            }
+        }
+
+        private void NotifyObserversItemUpdated(TKey key, TCacheItem item)
+        {
+            List<ICacheUpdateObserver<TKey, TCacheItem>> observersCopy;
+            lock (_observers)
+            {
+                observersCopy = new List<ICacheUpdateObserver<TKey, TCacheItem>>(_observers);
+            }
+
+            foreach (var observer in observersCopy)
+            {
+                try
+                {
+                    observer.OnItemUpdated(key, item);
+                }
+                catch (Exception ex)
+                {
+                    // Log error but don't fail the operation
+                    System.Diagnostics.Debug.WriteLine($"Error notifying observer: {ex.Message}");
+                }
+            }
+        }
+
+        private void NotifyObserversItemDeleted(TKey key)
+        {
+            List<ICacheUpdateObserver<TKey, TCacheItem>> observersCopy;
+            lock (_observers)
+            {
+                observersCopy = new List<ICacheUpdateObserver<TKey, TCacheItem>>(_observers);
+            }
+
+            foreach (var observer in observersCopy)
+            {
+                try
+                {
+                    observer.OnItemDeleted(key);
+                }
+                catch (Exception ex)
+                {
+                    // Log error but don't fail the operation
+                    System.Diagnostics.Debug.WriteLine($"Error notifying observer: {ex.Message}");
+                }
+            }
         }
     }
 }

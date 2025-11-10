@@ -12,13 +12,19 @@ namespace SampleApi.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IItemsCacheService<int, Product> _productItemsCache;
+        private readonly IItemsCacheGroupedService<Product, string> _categoryGroupedCache;
+        private readonly IItemsCacheGroupedService<Product, bool> _activeGroupedCache;
         private readonly ILogger<ProductsController> _logger;
 
         public ProductsController(
             IItemsCacheService<int, Product> productItemsCache,
+            IItemsCacheGroupedService<Product, string> categoryGroupedCache,
+            IItemsCacheGroupedService<Product, bool> activeGroupedCache,
             ILogger<ProductsController> logger)
         {
             _productItemsCache = productItemsCache ?? throw new ArgumentNullException(nameof(productItemsCache));
+            _categoryGroupedCache = categoryGroupedCache ?? throw new ArgumentNullException(nameof(categoryGroupedCache));
+            _activeGroupedCache = activeGroupedCache ?? throw new ArgumentNullException(nameof(activeGroupedCache));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -100,6 +106,47 @@ namespace SampleApi.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error retrieving cache statistics");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        /// <summary>
+        /// Gets products for a specific category
+        /// </summary>
+        /// <param name="category">Category name</param>
+        /// <returns>List of products in the category</returns>
+        [HttpGet("grouped/category/{category}")]
+        public ActionResult<IEnumerable<Product>> GetProductsByCategory(string category)
+        {
+            try
+            {
+                var products = _categoryGroupedCache.GetByGroupKey(category).ToList();
+                _logger.LogInformation("Retrieved {Count} products for category {Category}", products.Count, category);
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving products for category {Category}", category);
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        /// <summary>
+        /// Gets products grouped by active status
+        /// </summary>
+        /// <returns>Enumerable of active status-product pairs</returns>
+        [HttpGet("grouped/active")]
+        public ActionResult<IEnumerable<Product>> GetProductsGroupedByActive()
+        {
+            try
+            {
+                var grouped = _activeGroupedCache.GetByGroupKey(true);
+                _logger.LogInformation("Retrieved {GroupCount} active status groups from cache", grouped.Count());
+                return Ok(grouped);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving products grouped by active status");
                 return StatusCode(500, "Internal server error");
             }
         }

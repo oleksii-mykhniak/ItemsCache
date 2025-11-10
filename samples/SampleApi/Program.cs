@@ -18,6 +18,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddItemsCache<int, Product>();
 
+// Register grouped cache services
+builder.Services.AddItemsCacheGrouped<int, Product, string>(p => p.Category ?? "Uncategorized");
+builder.Services.AddItemsCacheGrouped<int, Product, bool>(p => p.IsActive);
+
 // without retry policy
 builder.Services.AddScoped<IDataSource<int, Product>, DataFromDbSource>();
 

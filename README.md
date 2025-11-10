@@ -155,6 +155,59 @@ public class DatabaseDataSource : IDataSource<User>
 }
 ```
 
+### Grouped Cache
+
+ItemsCache supports pre-computed grouped indexes that are automatically maintained in memory. This trades memory for CPU performance, providing O(1) lookups for grouped data.
+
+**Register grouped cache services:**
+
+```csharp
+builder.Services.AddItemsCache<int, Product>();
+
+// Group by category
+builder.Services.AddItemsCacheGrouped<int, Product, string>(p => p.Category ?? "Uncategorized");
+
+// Group by active status
+builder.Services.AddItemsCacheGrouped<int, Product, bool>(p => p.IsActive);
+```
+
+**Use grouped cache in your controllers:**
+
+```csharp
+[ApiController]
+[Route("api/[controller]")]
+public class ProductsController : ControllerBase
+{
+    private readonly IItemsCacheGroupedService<int, Product, string> _categoryGroupedCache;
+    
+    public ProductsController(
+        IItemsCacheGroupedService<int, Product, string> categoryGroupedCache)
+    {
+        _categoryGroupedCache = categoryGroupedCache;
+    }
+    
+    [HttpGet("grouped/category")]
+    public ActionResult<Dictionary<string, List<Product>>> GetProductsGroupedByCategory()
+    {
+        var grouped = _categoryGroupedCache.GetGrouped();
+        return Ok(grouped);
+    }
+    
+    [HttpGet("grouped/category/{category}")]
+    public ActionResult<List<Product>> GetProductsByCategory(string category)
+    {
+        var products = _categoryGroupedCache.GetByGroupKey(category);
+        return Ok(products);
+    }
+}
+```
+
+**Key Features:**
+- **Automatic Updates**: Grouped indexes are automatically updated when cache items change
+- **Memory Efficient**: Pre-computed indexes eliminate CPU overhead on retrieval
+- **Multiple Groupings**: Register multiple grouped services for different grouping strategies
+- **Thread Safe**: All operations are thread-safe
+
 ## Architecture
 
 ItemsCache follows SOLID principles with a clean, modular architecture:

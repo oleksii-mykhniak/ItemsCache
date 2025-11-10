@@ -24,4 +24,31 @@ public static class ServiceProviderExtensions
             
         return serviceCollection;
     }
+    
+    public static IServiceCollection AddItemsCacheGrouped<TKey, TCacheItem, TGroupKey>(
+        this IServiceCollection serviceCollection,
+        Func<TCacheItem, TGroupKey> keySelector)
+        where TKey : notnull
+        where TCacheItem : class
+        where TGroupKey : notnull
+    {
+        if (keySelector == null)
+            throw new ArgumentNullException(nameof(keySelector));
+
+        serviceCollection.AddSingleton<IItemsCacheGroupedService<TCacheItem, TGroupKey>>(sp =>
+        {
+            var logger = sp.GetRequiredService<Microsoft.Extensions.Logging.ILogger<ItemsCacheGroupedService<TKey, TCacheItem, TGroupKey>>>();
+            var groupedService = new ItemsCacheGroupedService<TKey, TCacheItem, TGroupKey>(keySelector, logger);
+            
+            var cacheService = sp.GetRequiredService<IItemsCacheServiceWithModifications<TKey, TCacheItem>>();
+            if (cacheService is ItemsCacheService<TKey, TCacheItem> concreteCache)
+            {
+                concreteCache.RegisterObserver(groupedService);
+            }
+            
+            return groupedService;
+        });
+
+        return serviceCollection;
+    }
 }
