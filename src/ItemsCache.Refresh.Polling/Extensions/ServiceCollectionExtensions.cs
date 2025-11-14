@@ -18,7 +18,7 @@ namespace ItemsCache.Refresh.Polling.Extensions
             serviceCollection.AddRefreshItemCacheHandlers<TKey, TCacheItem>();
             
             // Register polling-specific services
-            serviceCollection.AddTransient<IItemsCachePollingRefresher, ItemsCachePollingRefresher<TKey, TCacheItem, TRefreshContext>>();
+            serviceCollection.AddSingleton<IItemsCachePollingRefresher, ItemsCachePollingRefresher<TKey, TCacheItem, TRefreshContext>>();
             serviceCollection.AddHostedService<ItemsCachePollingRefreshBackgroundService>();
             
             serviceCollection.Configure<ItemsCacheOptions>(configuration.GetSection("CacheOptions"));

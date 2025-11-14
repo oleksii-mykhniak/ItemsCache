@@ -9,15 +9,15 @@ namespace ItemsCache.Refresh.Polling.Services
 {
     internal sealed class ItemsCachePollingRefreshBackgroundService : BackgroundService
     {
-        private readonly IServiceProvider _serviceProvider;
+        private readonly List<IItemsCachePollingRefresher> _cachePollingRefreshers;
         private readonly IOptionsMonitor<ItemsCacheOptions> _optionsMonitor;
         private readonly ILogger<ItemsCachePollingRefreshBackgroundService> _logger;
 
-        public ItemsCachePollingRefreshBackgroundService(IServiceProvider serviceProvider,
+        public ItemsCachePollingRefreshBackgroundService(List<IItemsCachePollingRefresher> cachePollingRefreshers,
             IOptionsMonitor<ItemsCacheOptions> optionsMonitor,
             ILogger<ItemsCachePollingRefreshBackgroundService> logger)
         {
-            _serviceProvider = serviceProvider;
+            _cachePollingRefreshers = cachePollingRefreshers;
             _optionsMonitor = optionsMonitor;
             _logger = logger;
         }
@@ -41,10 +41,7 @@ namespace ItemsCache.Refresh.Polling.Services
                     break;
 
                 _logger.LogInformation("Items cache polling refresh started. Next refresh");
-
-                using var scope = _serviceProvider.CreateScope();
-                var cachePollingRefreshers = scope.ServiceProvider.GetServices<IItemsCachePollingRefresher>();
-                var refreshTasks = cachePollingRefreshers.Select(r => r.RefreshAsync(stoppingToken));
+                var refreshTasks = _cachePollingRefreshers.Select(r => r.RefreshAsync(stoppingToken));
                 await Task.WhenAll(refreshTasks);
 
                 _logger.LogInformation("Items cache polling refresh completed. Next refresh");
