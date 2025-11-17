@@ -12,10 +12,10 @@ public static class ServiceProviderExtensions
         where TKey : notnull
         where TCacheItem : class
     {
-        var cache = new ItemsCacheService<TKey, TCacheItem>();
-        
-        serviceCollection.AddSingleton<IItemsCacheService<TKey, TCacheItem>>(cache);
-        serviceCollection.AddSingleton<IItemsCacheServiceWithModifications<TKey, TCacheItem>>(cache);
+
+        serviceCollection.AddSingleton<ItemsCacheService<TKey, TCacheItem>>();
+        serviceCollection.AddSingleton<IItemsCacheService<TKey, TCacheItem>>(sp => sp.GetRequiredService<ItemsCacheService<TKey, TCacheItem>>());
+        serviceCollection.AddSingleton<IItemsCacheServiceWithModifications<TKey, TCacheItem>>(sp => sp.GetRequiredService<ItemsCacheService<TKey, TCacheItem>>());
         
         serviceCollection.AddTransient<IItemsCacheLoader, ItemsCacheLoader<TKey, TCacheItem>>();
         
@@ -38,15 +38,7 @@ public static class ServiceProviderExtensions
         serviceCollection.AddSingleton<IItemsCacheGroupedService<TCacheItem, TGroupKey>>(sp =>
         {
             var logger = sp.GetRequiredService<Microsoft.Extensions.Logging.ILogger<ItemsCacheGroupedService<TKey, TCacheItem, TGroupKey>>>();
-            var groupedService = new ItemsCacheGroupedService<TKey, TCacheItem, TGroupKey>(keySelector, logger);
-            
-            var cacheService = sp.GetRequiredService<IItemsCacheServiceWithModifications<TKey, TCacheItem>>();
-            if (cacheService is ItemsCacheService<TKey, TCacheItem> concreteCache)
-            {
-                concreteCache.RegisterObserver(groupedService);
-            }
-            
-            return groupedService;
+            return new ItemsCacheGroupedService<TKey, TCacheItem, TGroupKey>(keySelector, logger);
         });
 
         return serviceCollection;

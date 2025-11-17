@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using ItemsCache.Core.Abstraction.Exceptions;
 using ItemsCache.Core.Abstraction.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace ItemsCache.Core.Services
 {
@@ -10,23 +11,19 @@ namespace ItemsCache.Core.Services
     {
         private volatile bool _isInitialized;
         private ConcurrentDictionary<TKey, TCacheItem> _cache = new();
-        private readonly List<ICacheUpdateObserver<TKey, TCacheItem>> _observers = new();
+
+        private readonly List<ICacheUpdateObserver<TKey, TCacheItem>> _observers;
+        private readonly ILogger<ItemsCacheService<TKey, TCacheItem>> _logger;
+
+        public ItemsCacheService(
+            List<ICacheUpdateObserver<TKey, TCacheItem>> observers,
+            ILogger<ItemsCacheService<TKey, TCacheItem>> logger)
+        {
+            _observers = observers;
+            _logger = logger;
+        }
 
         public int Count => _cache.Count;
-
-        public void RegisterObserver(ICacheUpdateObserver<TKey, TCacheItem> observer)
-        {
-            if (observer == null)
-                throw new ArgumentNullException(nameof(observer));
-
-            lock (_observers)
-            {
-                if (!_observers.Contains(observer))
-                {
-                    _observers.Add(observer);
-                }
-            }
-        }
 
         public bool TryGetByKey(TKey key, out TCacheItem? item)
         {
@@ -48,10 +45,9 @@ namespace ItemsCache.Core.Services
         {
             _cache = new ConcurrentDictionary<TKey, TCacheItem>(items);
             _isInitialized = true;
-            
-            // Notify observers
+
             NotifyObserversRefreshed(items);
-            
+
             return true;
         }
 
@@ -59,26 +55,24 @@ namespace ItemsCache.Core.Services
         {
             var itemFromCache = _cache.AddOrUpdate(key, item, (_, _) => item);
             var result = itemFromCache.Equals(item);
-            
-            // Notify observers
+
             if (result)
             {
                 NotifyObserversItemUpdated(key, item);
             }
-            
+
             return result;
         }
 
         public bool TryDelete(TKey key)
         {
             var result = _cache.TryRemove(key, out _);
-            
-            // Notify observers
+
             if (result)
             {
                 NotifyObserversItemDeleted(key);
             }
-            
+
             return result;
         }
 
@@ -98,9 +92,7 @@ namespace ItemsCache.Core.Services
                 }
                 catch (Exception ex)
                 {
-                    // Log error but don't fail the operation
-                    // In production, you might want to use ILogger here
-                    System.Diagnostics.Debug.WriteLine($"Error notifying observer: {ex.Message}");
+                    _logger.LogError(ex, "Error notifying observer of cache refresh");
                 }
             }
         }
@@ -121,8 +113,7 @@ namespace ItemsCache.Core.Services
                 }
                 catch (Exception ex)
                 {
-                    // Log error but don't fail the operation
-                    System.Diagnostics.Debug.WriteLine($"Error notifying observer: {ex.Message}");
+                    _logger.LogError(ex, "Error notifying observer of item update");
                 }
             }
         }
@@ -143,8 +134,7 @@ namespace ItemsCache.Core.Services
                 }
                 catch (Exception ex)
                 {
-                    // Log error but don't fail the operation
-                    System.Diagnostics.Debug.WriteLine($"Error notifying observer: {ex.Message}");
+                    _logger.LogError(ex, "Error notifying observer of item deletion");
                 }
             }
         }

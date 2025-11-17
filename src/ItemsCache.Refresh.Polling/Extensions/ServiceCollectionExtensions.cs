@@ -1,5 +1,7 @@
+using ItemsCache.Core.Abstraction.Interfaces;
 using ItemsCache.Refresh.Core.Extensions;
 using ItemsCache.Refresh.Polling.Abstraction;
+using ItemsCache.Refresh.Polling.Abstraction.Interfaces;
 using ItemsCache.Refresh.Polling.Abstraction.Models;
 using ItemsCache.Refresh.Polling.Services;
 using Microsoft.Extensions.Configuration;
@@ -14,10 +16,8 @@ namespace ItemsCache.Refresh.Polling.Extensions
             where TCacheItem : class
             where TRefreshContext : class
         {
-            // Register refresh handlers
             serviceCollection.AddRefreshItemCacheHandlers<TKey, TCacheItem>();
             
-            // Register polling-specific services
             serviceCollection.AddSingleton<IItemsCachePollingRefresher, ItemsCachePollingRefresher<TKey, TCacheItem, TRefreshContext>>();
             serviceCollection.AddHostedService<ItemsCachePollingRefreshBackgroundService>();
             
