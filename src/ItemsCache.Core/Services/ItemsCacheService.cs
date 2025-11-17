@@ -12,11 +12,11 @@ namespace ItemsCache.Core.Services
         private volatile bool _isInitialized;
         private ConcurrentDictionary<TKey, TCacheItem> _cache = new();
 
-        private readonly List<ICacheUpdateObserver<TKey, TCacheItem>> _observers;
+        private readonly IEnumerable<ICacheUpdateObserver<TKey, TCacheItem>> _observers;
         private readonly ILogger<ItemsCacheService<TKey, TCacheItem>> _logger;
 
         public ItemsCacheService(
-            List<ICacheUpdateObserver<TKey, TCacheItem>> observers,
+            IEnumerable<ICacheUpdateObserver<TKey, TCacheItem>> observers,
             ILogger<ItemsCacheService<TKey, TCacheItem>> logger)
         {
             _observers = observers;
@@ -78,13 +78,7 @@ namespace ItemsCache.Core.Services
 
         private void NotifyObserversRefreshed(IEnumerable<KeyValuePair<TKey, TCacheItem>> items)
         {
-            List<ICacheUpdateObserver<TKey, TCacheItem>> observersCopy;
-            lock (_observers)
-            {
-                observersCopy = new List<ICacheUpdateObserver<TKey, TCacheItem>>(_observers);
-            }
-
-            foreach (var observer in observersCopy)
+            foreach (var observer in _observers)
             {
                 try
                 {
@@ -99,13 +93,7 @@ namespace ItemsCache.Core.Services
 
         private void NotifyObserversItemUpdated(TKey key, TCacheItem item)
         {
-            List<ICacheUpdateObserver<TKey, TCacheItem>> observersCopy;
-            lock (_observers)
-            {
-                observersCopy = new List<ICacheUpdateObserver<TKey, TCacheItem>>(_observers);
-            }
-
-            foreach (var observer in observersCopy)
+            foreach (var observer in _observers)
             {
                 try
                 {
@@ -120,13 +108,7 @@ namespace ItemsCache.Core.Services
 
         private void NotifyObserversItemDeleted(TKey key)
         {
-            List<ICacheUpdateObserver<TKey, TCacheItem>> observersCopy;
-            lock (_observers)
-            {
-                observersCopy = new List<ICacheUpdateObserver<TKey, TCacheItem>>(_observers);
-            }
-
-            foreach (var observer in observersCopy)
+            foreach (var observer in _observers)
             {
                 try
                 {

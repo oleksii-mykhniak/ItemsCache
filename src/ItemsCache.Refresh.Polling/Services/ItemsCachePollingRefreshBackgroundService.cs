@@ -8,11 +8,11 @@ namespace ItemsCache.Refresh.Polling.Services
 {
     internal sealed class ItemsCachePollingRefreshBackgroundService : BackgroundService
     {
-        private readonly List<IItemsCachePollingRefresher> _cachePollingRefreshers;
+        private readonly IEnumerable<IItemsCachePollingRefresher> _cachePollingRefreshers;
         private readonly IOptionsMonitor<ItemsCacheOptions> _optionsMonitor;
         private readonly ILogger<ItemsCachePollingRefreshBackgroundService> _logger;
 
-        public ItemsCachePollingRefreshBackgroundService(List<IItemsCachePollingRefresher> cachePollingRefreshers,
+        public ItemsCachePollingRefreshBackgroundService(IEnumerable<IItemsCachePollingRefresher> cachePollingRefreshers,
             IOptionsMonitor<ItemsCacheOptions> optionsMonitor,
             ILogger<ItemsCachePollingRefreshBackgroundService> logger)
         {
